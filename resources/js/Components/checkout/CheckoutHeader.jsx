@@ -5,30 +5,30 @@ export default function CheckoutHeader() {
     return (
         <div className="flex justify-between items-start mb-8">
             <div>
-                {/* Nombre de la empresa */}
+             
                 <h1
                     className="text-4xl font-bold text-turquoise"
                     style={{ fontFamily: "'Playfair Display', serif", letterSpacing: '1px' }}
                 >
-                    MARO
+                    AQUA
                 </h1>
 
                 <h2
                     className="text-3xl font-semibold text-darkGray mt-1"
                     style={{ fontFamily: "'Playfair Display', serif", letterSpacing: '1px' }}
                 >
-                    UNIFORMES
+                    HEALTH
                 </h2>
 
                 <p
                     className="text-sm text-grayCustom mt-2 tracking-widest"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                 >
-                    Concepcion · Chile
+                    Cochabamba · Bolivia
                 </p>
             </div>
 
-            {/* Icono de Home */}
+           
             <Link
                 href="/"
                 className="text-turquoise hover:text-darkTurquoise transition-colors"

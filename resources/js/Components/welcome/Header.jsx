@@ -17,41 +17,41 @@ export default function Header({ auth }) {
 
   return (
     <>
-      <header className="w-full bg-darkGray text-black shadow-lg py-4 border-b-2 border-black">
+      {/* HEADER */}
+      <header className="w-full bg-white text-gray-800 shadow-sm py-4 border-b border-blueLight">
         <div className="container mx-auto flex justify-between items-center px-6">
 
-
+          {/* LOGO */}
           <Link href="/" className="flex items-center gap-3">
             <img
-              src="https://res.cloudinary.com/dnbklbswg/image/upload/v1765627552/Captura_de_pantalla_2025-12-13_075927-removebg-preview_m4lqsz.png"
+              src="https://res.cloudinary.com/dnbklbswg/image/upload/v1759791758/Logo_AH_con_HTW_wzxlez.jpg"
               alt="Logo de la tienda"
-              className="h-20 w-40 md:h-40 md:w-72 object-contain transition-transform duration-300 hover:scale-105 drop-shadow-lg"
+              className="h-16 w-32 md:h-24 md:w-48 object-contain transition-transform duration-300 hover:scale-105"
             />
           </Link>
 
-
-          <nav className="flex md:text-xl md:gap-10 text-xs gap-1 font-medium">
+          {/* NAV */}
+          <nav className="flex md:text-lg md:gap-10 text-sm gap-4 font-medium">
             <Link
               href="/Contacto"
               className="
-      relative
-      text-xl
-      font-semibold
-      text-grayCustom
-      transition-all
-      duration-300
-      hover:text-turquoise
+                relative
+                font-semibold
+                text-greenDark
+                transition-colors
+                duration-300
+                hover:text-bluePrimary
 
-      after:absolute
-      after:left-0
-      after:-bottom-1
-      after:h-[2px]
-      after:w-0
-      after:bg-darkTurquoise
-      after:transition-all
-      after:duration-300
-      hover:after:w-full
-    "
+                after:absolute
+                after:left-0
+                after:-bottom-1
+                after:h-[2px]
+                after:w-0
+                after:bg-bluePrimary
+                after:transition-all
+                after:duration-300
+                hover:after:w-full
+              "
             >
               Contacto
             </Link>
@@ -60,18 +60,20 @@ export default function Header({ auth }) {
         </div>
       </header>
 
-
+      {/* FLASH MESSAGE */}
       {flashMessage && (
         <div
-          className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-500 
-            ${flashMessage.type === 'success' ? 'bg-black text-white' : 'bg-red-600 text-white'} 
-            px-6 py-4 rounded-lg shadow-xl animate-slideDown`}
+          className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-500
+            ${flashMessage.type === 'success'
+              ? 'bg-greenDark text-white'
+              : 'bg-red-600 text-white'}
+            px-6 py-3 rounded-lg shadow-lg animate-slideDown`}
         >
           {flashMessage.message}
         </div>
       )}
 
-      {/* Animación */}
+      {/* ANIMACIÓN */}
       <style>
         {`
           @keyframes slideDown {
@@ -79,7 +81,7 @@ export default function Header({ auth }) {
             100% { opacity: 1; transform: translateY(0) translateX(-50%); }
           }
           .animate-slideDown {
-            animation: slideDown 0.5s ease-out forwards;
+            animation: slideDown 0.4s ease-out forwards;
           }
         `}
       </style>

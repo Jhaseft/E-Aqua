@@ -19,7 +19,6 @@ export default function CheckoutPageContent() {
     const [customerMail, setCustomerMail] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('transfer');
 
-    // Modal  WhatsApp
     const [showSuccess, setShowSuccess] = useState(false);
     const [whatsappURL, setWhatsappURL] = useState('');
 
@@ -67,17 +66,13 @@ export default function CheckoutPageContent() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document
-                        .querySelector('meta[name="csrf-token"]')
-                        .content,
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json'
                 },
                 body: JSON.stringify(orderData)
             });
 
-            if (!response.ok) {
-                throw new Error('Error al crear el pedido');
-            }
+            if (!response.ok) throw new Error('Error al crear el pedido');
 
             const data = await response.json();
             const orderId = data.order_id;
@@ -113,14 +108,12 @@ export default function CheckoutPageContent() {
         }
     };
 
-    // Abrir WhatsApp y redirigir automáticamente
     useEffect(() => {
         if (showSuccess && whatsappURL) {
             const timer = setTimeout(() => {
                 window.open(whatsappURL, '_blank');
                 window.location.href = '/';
             }, 2000);
-
             return () => clearTimeout(timer);
         }
     }, [showSuccess, whatsappURL]);
@@ -129,8 +122,8 @@ export default function CheckoutPageContent() {
         <Layout title="Checkout">
             <Head title="Checkout" />
 
-            <div className="max-w-3xl mx-auto p-6 bg-white text-grayCustom rounded-2xl shadow-lg border border-gray-200">
-                <CheckoutHeader className="text-turquoise mb-4" />
+            <div className="max-w-3xl mx-auto p-6 bg-white text-greenDark rounded-2xl shadow-lg border border-blueLight">
+                <CheckoutHeader className="text-bluePrimary mb-4" />
 
                 <CustomerInfoForm
                     customerName={customerName}
@@ -139,7 +132,7 @@ export default function CheckoutPageContent() {
                     setCustomerPhone={setCustomerPhone}
                     customerMail={customerMail}
                     setCustomerMail={setCustomerMail}
-                    className="mb-6 bg-darkGray/10 rounded-lg p-4"
+                    className="mb-6 bg-blueLight/10 rounded-lg p-4"
                 />
 
                 <CartItems
@@ -147,7 +140,7 @@ export default function CheckoutPageContent() {
                     loading={loading}
                     subtotal={subtotal}
                     total={total}
-                    className="mb-6 bg-turquoise/10 rounded-lg p-4"
+                    className="mb-6 bg-bluePrimary/10 rounded-lg p-4"
                 />
 
                 <MethodPay
@@ -161,11 +154,11 @@ export default function CheckoutPageContent() {
                     subtotal={subtotal}
                     total={total}
                     loading={loading}
-                    className="mb-6 bg-darkTurquoise/10 rounded-lg p-4"
+                    className="mb-6 bg-blueSecondary/10 rounded-lg p-4"
                 />
 
                 <button
-                    className={`w-full bg-turquoise hover:bg-darkTurquoise text-white font-bold py-3 px-6 rounded-lg shadow-md flex justify-center items-center transition-all duration-300 ${(loading || processing) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full bg-bluePrimary hover:bg-blueSecondary text-white font-bold py-3 px-6 rounded-lg shadow-md flex justify-center items-center transition-all duration-300 ${(loading || processing) ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={handlePlaceOrder}
                     disabled={loading || processing}
                 >
@@ -198,14 +191,14 @@ export default function CheckoutPageContent() {
             {showSuccess && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center">
-                        <h2 className="text-2xl font-bold text-green-600 mb-2">
+                        <h2 className="text-2xl font-bold text-greenDark mb-2">
                             ¡Pedido creado!
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-greenDark mb-4">
                             Tu pedido fue registrado correctamente.<br />
                             En unos segundos se abrirá WhatsApp.
                         </p>
-                        <p className="text-sm text-gray-400">
+                        <p className="text-sm text-greenDark/70">
                             Serás redirigido automáticamente.
                         </p>
                     </div>

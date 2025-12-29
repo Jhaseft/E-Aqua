@@ -20,12 +20,10 @@ export default {
             },
 
             colors: {
-
-                /* Paleta Jhaseft */
-                darkGray: '#231f20',      // Gris oscuro
-                grayCustom: '#939191',    // Gris
-                turquoise: '#01a387',     // Turquesa vivido
-                darkTurquoise: '#165a4e', // Turquesa oscuro
+                bluePrimary: '#0784c5',   // Azul principal
+                greenDark: '#176c36',     // Verde oscuro
+                blueLight: '#add8df',     // Azul claro
+                blueSecondary: '#5398bb', // Azul secundario
             },
         },
     },

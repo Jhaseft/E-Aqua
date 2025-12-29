@@ -11,7 +11,7 @@ export default function Layout({ title, auth, children }) {
 
   return (
     <CartProvider>
-      <Head title={title || "Marou Uniformes"} />
+      <Head title={title || "Aqua Health "} />
 
       <div className="min-h-screen flex flex-col bg-white text-darkGray relative">
         <Header auth={auth} />

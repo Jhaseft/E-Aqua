@@ -4,7 +4,7 @@ import Videos from '@/Components/welcome/Videos';
 export default function Welcome({ auth, categories, search, page, hasMore }) {
 
     return (
-            <Layout title="Maro|Inicio" auth={auth}>
+            <Layout title="AquaHealth|Inicio" auth={auth}>
                 <Products
                     categories={categories} 
                     search={search} 

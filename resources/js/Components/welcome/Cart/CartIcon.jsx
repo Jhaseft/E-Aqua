@@ -11,11 +11,13 @@ export default function CartIcon({ onClick }) {
     >
       <div
         className="
-          bg-darkGray
+          bg-white
           w-12
           h-40
           rounded-l-full
-          shadow-xl
+          border
+          border-blueLight
+          shadow-lg
           flex
           flex-col
           items-center
@@ -23,19 +25,23 @@ export default function CartIcon({ onClick }) {
           relative
           transition-all
           duration-300
-          hover:bg-darkTurquoise
+          hover:bg-blueLight
         "
       >
-        <ShoppingCart size={32} className="text-turquoise" />
+     
+        <ShoppingCart
+          size={30}
+          className="text-bluePrimary transition-colors duration-300"
+        />
 
         {cartCount > 0 && (
           <span
             className="
               absolute
-              top-12  
+              top-12
               right-1
-              bg-turquoise
-              text-darkGray
+              bg-greenDark
+              text-white
               text-xs
               font-bold
               w-7
