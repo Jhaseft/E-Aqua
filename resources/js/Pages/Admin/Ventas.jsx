@@ -6,7 +6,7 @@ export default function Ventas({ auth, categories, search, page, hasMore }) {
  
 
     return (
-        <Layoutadmin title="Maro|Admin" auth={auth}>
+        <Layoutadmin title="Aqua|Admin" auth={auth}>
             <ProductsAdmin 
                 categories={categories} 
                 search={search} 

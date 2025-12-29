@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Pedido Maro</title>
+    <title>Pedido Aqua Health</title>
 </head> 
 
 <body style="margin:0; padding:0; background-color:#f2f2f2; font-family:Arial, sans-serif;">
@@ -14,15 +14,15 @@
 
             <!-- CARD OSCURA -->
             <table width="600" cellpadding="0" cellspacing="0"
-                   style="background-color:#231f20; border-radius:14px; padding:32px;">
+                   style="background-color:#0e4d7b; border-radius:14px; padding:32px;">
                 <tr>
                     <td>
 
                         <!-- Logo -->
                         <div style="text-align:center; margin-bottom:25px;">
                             <img
-                                src="https://res.cloudinary.com/dnbklbswg/image/upload/v1765627552/Captura_de_pantalla_2025-12-13_075927-removebg-preview_m4lqsz.png"
-                                alt="Maro"
+                                src="https://res.cloudinary.com/dnbklbswg/image/upload/v1760231510/Logo_d0isxo.png"
+                                alt="Aqua Health"
                                 style="width:150px;"
                             >
                         </div>
@@ -32,18 +32,18 @@
                             ¡Gracias por tu compra, {{ $order->customer_name }}!
                         </h2>
 
-                        <p style="text-align:center; color:#cccccc; margin-bottom:25px;">
+                        <p style="text-align:center; color:#cce0f0; margin-bottom:25px;">
                             Hemos recibido tu pedido correctamente
                         </p>
 
-                        <!-- ID DEL PEDIDO (MEJORADO) -->
+                        <!-- ID DEL PEDIDO -->
                         <div style="
-                            background:#2f2b2c;
+                            background:#145a8c;
                             padding:18px;
                             border-radius:12px;
                             text-align:center;
                             margin-bottom:30px;
-                            border:1px solid #3a3637;
+                            border:1px solid #1976a1;
                         ">
                             <p style="margin:0; font-size:13px; color:#bfbfbf; letter-spacing:1px;">
                                 NÚMERO DE PEDIDO
@@ -57,16 +57,16 @@
                             ">
                                 #{{ $order->id }}
                             </p>
-                            <p style="margin-top:8px; font-size:12px; color:#aaaaaa;">
-                                Usa este número como referencia en tu transferencia
+                            <p style="margin-top:8px; font-size:12px; color:#cce0f0;">
+                                Usa este número como referencia en tu pago
                             </p>
                         </div>
 
-                        <!-- Tabla -->
+                        <!-- Tabla de productos -->
                         <table width="100%" cellpadding="0" cellspacing="0"
                                style="border-collapse:collapse; margin-bottom:25px; color:#ffffff;">
                             <thead>
-                                <tr style="background-color:#2f2b2c;">
+                                <tr style="background-color:#145a8c;">
                                     <th style="padding:10px; text-align:left;">Producto</th>
                                     <th style="padding:10px; text-align:center;">Cant.</th>
                                     <th style="padding:10px; text-align:right;">Precio</th>
@@ -74,28 +74,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                                                @foreach($items as $item)
+                                @foreach($items as $item)
                                 <tr>
-                                    <td style="padding:10px; border-bottom:1px solid #3a3637;">
+                                    <td style="padding:10px; border-bottom:1px solid #1976a1;">
                                         {{ $item['name'] }}
-
                                         @if(!empty($item['size']))
                                             <br>
-                                            <small style="color:#b0b0b0;">
+                                            <small style="color:#b0d4f1;">
                                                 {{ $item['size'] }}
                                             </small>
                                         @endif
                                     </td>
 
-                                    <td style="padding:10px; text-align:center; border-bottom:1px solid #3a3637;">
+                                    <td style="padding:10px; text-align:center; border-bottom:1px solid #1976a1;">
                                         {{ $item['quantity'] }}
                                     </td>
 
-                                    <td style="padding:10px; text-align:right; border-bottom:1px solid #3a3637;">
+                                    <td style="padding:10px; text-align:right; border-bottom:1px solid #1976a1;">
                                         {{ number_format($item['price'], 0) }}
                                     </td>
 
-                                    <td style="padding:10px; text-align:right; border-bottom:1px solid #3a3637;">
+                                    <td style="padding:10px; text-align:right; border-bottom:1px solid #1976a1;">
                                         {{ number_format($item['subtotal'], 0) }}
                                     </td>
                                 </tr>
@@ -115,10 +114,10 @@
 
                         <!-- Información de pago -->
                         <div style="
-                            background:#2f2b2c;
+                            background:#145a8c;
                             padding:18px;
                             border-radius:12px;
-                            color:#e0e0e0;
+                            color:#cce0f0;
                         ">
                             <strong style="color:#ffffff;">Información importante</strong>
                             <ul style="padding-left:18px; margin-top:10px;">
@@ -137,7 +136,7 @@
 
                         <!-- Footer -->
                         <p style="margin-top:30px; text-align:center; color:#bfbfbf; font-size:13px;">
-                            Gracias por confiar en <strong style="color:#ffffff;">Maro</strong> 🤍<br>
+                            Gracias por confiar en <strong style="color:#ffffff;">Aqua Health</strong> 🤍<br>
                             Cualquier duda, estamos para ayudarte.
                         </p>
 
