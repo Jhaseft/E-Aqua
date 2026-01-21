@@ -58,15 +58,6 @@ export default function CartModal({ isOpen, onClose }) {
             Mi carrito
           </h2>
 
-          {cart.length > 0 && (
-            <button
-              onClick={clearCart}
-              className="flex items-center text-sm text-gray-500 hover:text-red-500 transition"
-            >
-              <Trash2 size={16} className="mr-1" />
-              Vaciar
-            </button>
-          )}
         </div>
 
         <div className="flex-1 overflow-y-auto space-y-4">
@@ -144,7 +135,16 @@ export default function CartModal({ isOpen, onClose }) {
           )}
         </div>
         {cart.length > 0 && (
+          <>
+          <button
+              onClick={clearCart}
+              className="flex items-center justify-center text-lg text-gray-500 hover:text-red-500 transition mr-10"
+            >
+              <Trash2 size={18} className="mr-1" />
+              Vaciar
+            </button>
           <div className="mt-4 border-t border-blueLight pt-4 flex flex-col gap-4">
+            
             <p className="flex justify-between font-bold text-lg">
               <span>Total</span>
               <span className="text-greenDark">
@@ -170,6 +170,9 @@ export default function CartModal({ isOpen, onClose }) {
               Confirmar pedido
             </Link>
           </div>
+          
+          </>
+          
         )}
       </div>
     </div>

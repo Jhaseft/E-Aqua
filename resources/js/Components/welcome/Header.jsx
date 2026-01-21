@@ -17,11 +17,11 @@ export default function Header({ auth }) {
 
   return (
     <>
-      {/* HEADER */}
+    
       <header className="w-full bg-white text-gray-800 shadow-sm py-4 border-b border-blueLight">
         <div className="container mx-auto flex justify-between items-center px-6">
 
-          {/* LOGO */}
+          
           <Link href="/" className="flex items-center gap-3">
             <img
               src="https://res.cloudinary.com/dnbklbswg/image/upload/v1759791758/Logo_AH_con_HTW_wzxlez.jpg"
@@ -30,8 +30,8 @@ export default function Header({ auth }) {
             />
           </Link>
 
-          {/* NAV */}
-          <nav className="flex md:text-lg md:gap-10 text-sm gap-4 font-medium">
+          
+          <nav className="flex md:text-2xl md:gap-10 text-xl gap-4 font-medium">
             <Link
               href="/Contacto"
               className="
@@ -60,7 +60,7 @@ export default function Header({ auth }) {
         </div>
       </header>
 
-      {/* FLASH MESSAGE */}
+     
       {flashMessage && (
         <div
           className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-500
@@ -73,7 +73,7 @@ export default function Header({ auth }) {
         </div>
       )}
 
-      {/* ANIMACIÓN */}
+     
       <style>
         {`
           @keyframes slideDown {

@@ -23,6 +23,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
+        "@icons-pack/react-simple-icons": "^13.8.0",
         "@midudev/tailwind-animations": "^0.2.0",
         "@react-google-maps/api": "^2.20.7",
         "framer-motion": "^12.23.26",

@@ -34,7 +34,7 @@ export default function Layout({ title, auth, children }) {
         />
 
         <a
-          href="https://wa.me/56978843627"
+          href="https://wa.me/59177427374"
           target="_blank"
           rel="noopener noreferrer"
           className="
@@ -44,12 +44,12 @@ export default function Layout({ title, auth, children }) {
             w-16
             h-16
             rounded-full
-            bg-turquoise
+            bg-green-500
             shadow-xl
             flex
             items-center
             justify-center
-            hover:bg-darkTurquoise
+            hover:bg-green-800
             transition
             z-[8000]
           "

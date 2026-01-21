@@ -95,7 +95,7 @@ export default function CheckoutPageContent() {
 
             messageLines.push('', ` *Total: $${total}*`);
 
-            const url = `https://wa.me/56978843627?text=${encodeURIComponent(messageLines.join('\n'))}`;
+            const url = `https://wa.me/59177427374?text=${encodeURIComponent(messageLines.join('\n'))}`;
 
             setWhatsappURL(url);
             setShowSuccess(true);
