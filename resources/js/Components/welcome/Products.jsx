@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState,useRef,useEffect   } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import ProductCard from './ProductCard';
+import { ArrowRightCircle } from 'lucide-react';
+import { ArrowLeftCircle } from 'lucide-react';
 
 export default function Products({
   categories: initialCategories = [],
@@ -159,57 +161,85 @@ export default function Products({
   );
 }
 
-/* ------------------ SWIPER ------------------ */
-
 function CategorySwiper({ products }) {
   if (!products?.length) return null;
 
   const isDesktopCarousel = products.length > 3;
 
-  return isDesktopCarousel ? (
-    <Swiper
-      className="z-[1] py-6"
-      modules={[Navigation, Pagination, Autoplay]}
-      spaceBetween={24}
-      slidesPerView={1}
-      navigation
-      autoplay={{ delay: 3500, disableOnInteraction: false }}
-      breakpoints={{
-        640: { slidesPerView: 2 },
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 },
-      }}
-      style={{
-        '--swiper-navigation-color': '#0784c5',
-        '--swiper-pagination-color': '#0784c5',
-      }}
-    >
-      {products.map(product => {
-        const outOfStock =
-          product.variants?.reduce((sum, v) => sum + v.stock, 0) === 0;
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const swiperRef = useRef(null);
 
-        return (
-          <SwiperSlide
-            key={product.id}
-            className={`
-              w-full h-full relative overflow-hidden rounded-3xl shadow-lg bg-white flex justify-center
-              border-4
-              ${outOfStock ? 'border-blueSecondary opacity-80' : 'border-blueLight'}
-            `}
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              borderImage: "linear-gradient(to bottom, #bae6fd, #38bdf8, #1e40af) 1",
-              borderStyle: "solid"
-            }}
-          >
-            <ProductCard product={product} isInSwiper={true} />
-          </SwiperSlide>
-        );
-      })}
-    </Swiper>
+  useEffect(() => {
+    if (swiperRef.current) {
+      // Asignar refs de navegación después del montaje
+      swiperRef.current.params.navigation.prevEl = prevRef.current;
+      swiperRef.current.params.navigation.nextEl = nextRef.current;
+      swiperRef.current.navigation.init();
+      swiperRef.current.navigation.update();
+    }
+  }, []);
+
+  return isDesktopCarousel ? (
+    <div className="relative py-6">
+      <Swiper
+        className="z-[1]"
+        modules={[Navigation, Pagination]}
+        spaceBetween={24}
+        slidesPerView={1}
+        onSwiper={(swiper) => (swiperRef.current = swiper)}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 2 },
+          1024: { slidesPerView: 3 },
+        }}
+        style={{
+          '--swiper-navigation-color': '#0784c5',
+          '--swiper-pagination-color': '#0784c5',
+        }}
+      >
+        {products.map((product) => {
+          const outOfStock =
+            product.variants?.reduce((sum, v) => sum + v.stock, 0) === 0;
+
+          return (
+            <SwiperSlide
+              key={product.id}
+              className={`
+                w-full h-full relative overflow-hidden rounded-3xl shadow-lg bg-white flex justify-center
+                border-4
+                ${outOfStock ? 'border-blueSecondary opacity-80' : 'border-blueLight'}
+              `}
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                borderImage:
+                  'linear-gradient(to bottom, #bae6fd, #38bdf8, #1e40af) 1',
+                borderStyle: 'solid',
+              }}
+            >
+              <ProductCard product={product} isInSwiper={true} />
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+
+     
+      <div
+        ref={prevRef}
+        className="absolute top-1/2 md:-left-20 -left-16 transform -translate-y-1/2 cursor-pointer z-20 text-3xl text-cyan-400"
+      >
+        <ArrowLeftCircle width={70} height={70}/>
+      </div>
+      <div
+        ref={nextRef}
+        className="absolute top-1/2 md:-right-20 -right-16 transform -translate-y-1/2 cursor-pointer z-20 text-3xl text-cyan-400"
+      >
+         <ArrowRightCircle width={70} height={70} />
+      </div>
+    </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {products.map(product => (
+      {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>

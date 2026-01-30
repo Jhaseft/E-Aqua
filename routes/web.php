@@ -15,10 +15,15 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ContactoController;
 use Inertia\Inertia;
 
 
 Route::get('/', [ProductController::class, 'index'])->name('welcome');
+
+//ruta para mandar email desde contacto
+Route::post('/contacto', [ContactoController::class, 'enviar']);
+
 
 Route::get('/Contacto', function () {
         return Inertia::render('Contacto');
