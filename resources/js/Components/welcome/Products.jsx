@@ -1,12 +1,11 @@
-import { useState,useRef,useEffect   } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import ProductCard from './ProductCard';
-import { ArrowRightCircle } from 'lucide-react';
-import { ArrowLeftCircle } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function Products({
   categories: initialCategories = [],
@@ -184,18 +183,25 @@ function CategorySwiper({ products }) {
     <div className="relative py-6">
       <Swiper
         className="z-[1]"
-        modules={[Navigation, Pagination]}
+        modules={[Navigation]}
         spaceBetween={24}
-        slidesPerView={1}
+        slidesPerView={3}
+        slidesPerGroup={3}
+        speed={500}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
         breakpoints={{
-          640: { slidesPerView: 2 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-        }}
-        style={{
-          '--swiper-navigation-color': '#0784c5',
-          '--swiper-pagination-color': '#0784c5',
+          0: {
+            slidesPerView: 1,
+            slidesPerGroup: 1,
+          },
+          640: {
+            slidesPerView: 2,
+            slidesPerGroup: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+            slidesPerGroup: 3,
+          },
         }}
       >
         {products.map((product) => {
@@ -223,19 +229,44 @@ function CategorySwiper({ products }) {
         })}
       </Swiper>
 
-     
-      <div
+
+      <button
         ref={prevRef}
-        className="absolute top-1/2 md:-left-20 -left-16 transform -translate-y-1/2 cursor-pointer z-20 text-3xl text-cyan-400"
+        className="
+              absolute top-1/2 -left-6 md:-left-12
+              -translate-y-1/2
+              z-20
+              flex items-center justify-center
+              w-10 h-14
+              bg-white/80 backdrop-blur
+              shadow-lg
+              border border-gray-200
+              hover:bg-white
+              transition
+            "
       >
-        <ArrowLeftCircle width={70} height={70}/>
-      </div>
-      <div
+        <ChevronLeft className="w-6 h-6 text-gray-700" />
+      </button>
+
+
+      <button
         ref={nextRef}
-        className="absolute top-1/2 md:-right-20 -right-16 transform -translate-y-1/2 cursor-pointer z-20 text-3xl text-cyan-400"
+        className="
+                absolute top-1/2 -right-6 md:-right-12
+                -translate-y-1/2
+                z-20
+                flex items-center justify-center
+                w-10 h-14
+                bg-white/80 backdrop-blur
+                shadow-lg
+                border border-gray-200
+                hover:bg-white
+                transition
+              "
       >
-         <ArrowRightCircle width={70} height={70} />
-      </div>
+        <ChevronRight className="w-6 h-6 text-gray-700" />
+      </button>
+
     </div>
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
