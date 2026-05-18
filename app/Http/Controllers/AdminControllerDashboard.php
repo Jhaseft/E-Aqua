@@ -14,7 +14,7 @@ class AdminControllerDashboard extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->integer('perPage', 4);
+        $perPage = $request->integer('perPage', 10);
         $search  = $request->string('search', '');
 
        $categories = Category::withCount('products')
