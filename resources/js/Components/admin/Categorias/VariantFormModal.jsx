@@ -14,8 +14,8 @@ export default function VariantFormModal({
 
  useEffect(() => {
   if (variant) {
-    const attrId = variant.values[0]?.attribute_id || "";
-    const valId = variant.values[0]?.id || "";
+    const attrId = variant.values?.[0]?.attribute_id || "";
+    const valId = variant.values?.[0]?.id || "";
     setSelectedAttribute(attrId);
     setSelectedValue(valId);
     setPrice(variant.price ?? ""); // aquí
