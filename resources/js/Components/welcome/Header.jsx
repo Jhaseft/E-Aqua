@@ -1,9 +1,20 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function Header({ auth }) {
   const { props } = usePage();
   const [flashMessage, setFlashMessage] = useState(null);
+  const categories = props.categories || [];
+  const [catOpen, setCatOpen] = useState(false);
+  const catRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (catRef.current && !catRef.current.contains(e.target)) setCatOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   useEffect(() => {
     if (props?.flash?.success) {
@@ -31,7 +42,39 @@ export default function Header({ auth }) {
           </Link>
 
           
-          <nav className="flex md:text-2xl md:gap-10 text-xl gap-4 font-medium">
+          <nav className="flex md:text-2xl md:gap-10 text-xl gap-4 font-medium items-center">
+
+            {categories.length > 0 && (
+              <div className="relative" ref={catRef}>
+                <button
+                  onClick={() => setCatOpen(v => !v)}
+                  className="flex items-center gap-1 text-sm font-medium text-gray-400 hover:text-bluePrimary transition-colors duration-200"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+                  </svg>
+                  <span className="hidden sm:inline">Categorías</span>
+                </button>
+
+                {catOpen && (
+                  <div className="absolute top-full right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 min-w-[180px] z-50">
+                    {categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        onClick={() => {
+                          setCatOpen(false);
+                          document.getElementById(`category-${cat.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-bluePrimary hover:bg-blue-50 transition-colors"
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             <Link
               href="/Contacto"
               className="

@@ -17,6 +17,21 @@ export default function Products({
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [loading, setLoading] = useState(false);
   const [searchTerm] = useState(initialSearch);
+  const sentinelRef = useRef(null);
+
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasMore && !loading) {
+          handleVerMasCategorias();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [hasMore, loading]);
 
   const handleVerMasCategorias = async () => {
     try {
@@ -58,7 +73,7 @@ export default function Products({
           const hasChildren = category.children?.length > 0;
 
           return (
-            <div key={category.id} className="mb-16">
+            <div key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '64px' }} className="mb-16">
               {idx !== 0 && (
                 <hr className="border-blueLight my-14" />
               )}
@@ -132,28 +147,9 @@ export default function Products({
         })}
 
 
-        {hasMore && (
-          <div className="flex justify-center mt-12">
-            <button
-              onClick={handleVerMasCategorias}
-              disabled={loading}
-              className="
-                px-8
-                py-3
-                rounded-xl
-                border
-                border-bluePrimary
-                text-bluePrimary
-                font-semibold
-                hover:bg-bluePrimary
-                hover:text-white
-                transition
-                disabled:opacity-50
-              "
-            >
-              {loading ? 'Cargando…' : 'Ver más categorías'}
-            </button>
-          </div>
+        <div ref={sentinelRef} className="h-4" />
+        {loading && (
+          <p className="text-center text-bluePrimary py-6 font-semibold">Cargando…</p>
         )}
       </section>
     </div>
@@ -163,7 +159,7 @@ export default function Products({
 function CategorySwiper({ products }) {
   if (!products?.length) return null;
 
-  const isDesktopCarousel = products.length > 3;
+  const isDesktopCarousel = products.length > 2;
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -206,7 +202,8 @@ function CategorySwiper({ products }) {
       >
         {products.map((product) => {
           const outOfStock =
-            product.variants?.reduce((sum, v) => sum + v.stock, 0) === 0;
+            product.variants?.length > 0 &&
+            product.variants.reduce((sum, v) => sum + v.stock, 0) === 0;
 
           return (
             <SwiperSlide

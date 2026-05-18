@@ -9,11 +9,13 @@ export default function ProductCard({ product, isInSwiper = false }) {
     product.multimedia?.[0]?.url ||
     "https://via.placeholder.com/600x800";
 
+  const isWhatsAppOnly = Number(product.price) === 0;
+
   return (
     <Link
       href={`/products/${product.name.replace(/\s+/g, '-').toLowerCase()}/${product.id}`}
       className={`
-        w-full h-full relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1
+        w-full h-full relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col
         ${!isInSwiper ? 'border-4' : ''}
       `}
       style={{
@@ -22,18 +24,18 @@ export default function ProductCard({ product, isInSwiper = false }) {
         borderStyle: !isInSwiper ? "solid" : undefined
       }}
     >
-      <div className="w-full aspect-[4/5] p-4 bg-white border-b border-y-blueSecondary rounded-t-3xl overflow-hidden">
+      <div className="w-full aspect-[4/5] p-4 bg-white border-b border-y-blueSecondary rounded-t-3xl overflow-hidden flex-shrink-0">
         <img
           src={imageUrl}
           alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="w-full h-full object-contain transition-transform duration-500 hover:scale-105"
         />
       </div>
 
-      <div className="p-5 flex flex-col gap-3">
-        <h3 className="text-lg font-bold uppercase tracking-wide text-gray-800">{product.name}</h3>
+      <div className="p-5 flex flex-col flex-1 gap-3">
+        <h3 className="text-lg font-bold uppercase tracking-wide text-gray-800 line-clamp-2">{product.name}</h3>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 flex-1 content-start">
           {product.variants?.map(v => {
             const out = v.stock === 0;
             return (
@@ -53,9 +55,15 @@ export default function ProductCard({ product, isInSwiper = false }) {
           })}
         </div>
 
-        <p className="text-2xl font-bold tracking-wide text-green-700">
-          $ {Number(product.price).toFixed(0)}
-        </p>
+        {isWhatsAppOnly ? (
+          <span className="inline-block self-start px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-300">
+            Solo por WhatsApp
+          </span>
+        ) : (
+          <p className="text-2xl font-bold tracking-wide text-green-700">
+            $ {Number(product.price).toFixed(0)}
+          </p>
+        )}
       </div>
     </Link>
   );
