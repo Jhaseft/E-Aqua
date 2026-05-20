@@ -29,8 +29,8 @@ export default function ProductCard({ product, isInSwiper = false, accent = fals
       <div className="p-4 flex flex-col flex-1 gap-2 overflow-hidden">
         {/* Nombre: siempre 2 líneas de altura para que todos los cards queden alineados */}
         <h3
-          className="text-sm font-bold uppercase tracking-wide text-gray-800 line-clamp-2 leading-snug"
-          style={{ fontFamily: "'Playfair Display', serif", minHeight: '2.6em' }}
+          className="text-sm font-extrabold uppercase tracking-wide text-gray-900 line-clamp-2 leading-snug"
+          style={{ minHeight: '2.6em', letterSpacing: '0.04em' }}
         >
           {product.name}
         </h3>
