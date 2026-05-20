@@ -161,7 +161,7 @@ export default function ShowProduct({ product }) {
         )}
 
         <a
-          href={`https://wa.me/56978843627?text=Hola!%20Estoy%20interesado%20en%20este%20producto:%0A${encodeURIComponent(product.name)}%0A${encodeURIComponent(currentUrl)}`}
+          href={`https://wa.me/59168830208?text=Hola!%20Estoy%20interesado%20en%20este%20producto:%0A${encodeURIComponent(product.name)}%0A${encodeURIComponent(currentUrl)}`}
           target="_blank"
           className="block text-center w-full py-4 rounded-xl border border-greenDark text-greenDark font-bold text-lg hover:bg-greenDark/10 transition"
         >
