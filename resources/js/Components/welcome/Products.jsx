@@ -72,6 +72,9 @@ export default function Products({
 
           const hasChildren = category.children?.length > 0;
 
+          const normalized = category.name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+          const isArmoQuimica = normalized.includes('armo') && (normalized.includes('quimica') || normalized.includes('química') || normalized.includes('quím'));
+
           return (
             <div key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '64px' }} className="mb-16">
               {idx !== 0 && (
@@ -81,7 +84,7 @@ export default function Products({
 
               <div className="relative mb-6">
                 <h2
-                  className="
+                  className={`
                     text-4xl
                     md:text-5xl
                     font-bold
@@ -90,9 +93,8 @@ export default function Products({
                     pl-4
                     py-2
                     border-l-[6px]
-                    border-bluePrimary
-                    text-bluePrimary
-                  "
+                    ${isArmoQuimica ? 'border-aquamarine text-aquamarine' : 'border-bluePrimary text-bluePrimary'}
+                  `}
                   style={{ fontFamily: "'Playfair Display', serif" }}
                 >
                   {category.name}
@@ -107,7 +109,7 @@ export default function Products({
 
 
               {filteredProducts.length > 0 && (
-                <CategorySwiper products={filteredProducts} />
+                <CategorySwiper products={filteredProducts} accent={isArmoQuimica} />
               )}
 
 
@@ -120,24 +122,23 @@ export default function Products({
                   return (
                     <div key={sub.id} className="mt-14">
                       <h3
-                        className="
+                        className={`
                           text-2xl
                           md:text-3xl
                           font-semibold
                           tracking-wide
                           pl-3
                           border-l-4
-                          border-blueSecondary
-                          text-gray-700
                           mb-10
-                        "
+                          ${isArmoQuimica ? 'border-aquamarine text-aquamarine' : 'border-blueSecondary text-gray-700'}
+                        `}
                         style={{ fontFamily: "'Playfair Display', serif" }}
                       >
                         {sub.name}
                       </h3>
 
                       {filteredSubProducts.length > 0 && (
-                        <CategorySwiper products={filteredSubProducts} />
+                        <CategorySwiper products={filteredSubProducts} accent={isArmoQuimica} />
                       )}
                     </div>
                   );
@@ -156,7 +157,7 @@ export default function Products({
   );
 }
 
-function CategorySwiper({ products }) {
+function CategorySwiper({ products, accent = false }) {
   if (!products?.length) return null;
 
   const isDesktopCarousel = products.length > 2;
@@ -165,9 +166,12 @@ function CategorySwiper({ products }) {
   const nextRef = useRef(null);
   const swiperRef = useRef(null);
 
+  const borderGradient = accent
+    ? 'linear-gradient(to bottom, #99f6e4, #2DD4BF, #0f766e) 1'
+    : 'linear-gradient(to bottom, #bae6fd, #38bdf8, #1e40af) 1';
+
   useEffect(() => {
     if (swiperRef.current) {
-      // Asignar refs de navegación después del montaje
       swiperRef.current.params.navigation.prevEl = prevRef.current;
       swiperRef.current.params.navigation.nextEl = nextRef.current;
       swiperRef.current.navigation.init();
@@ -211,16 +215,14 @@ function CategorySwiper({ products }) {
               className={`
                 w-full h-full relative overflow-hidden rounded-3xl shadow-lg bg-white flex justify-center
                 border-4
-                ${outOfStock ? 'border-blueSecondary opacity-80' : 'border-blueLight'}
+                ${outOfStock ? 'opacity-80' : ''}
               `}
               style={{
-                fontFamily: "'Playfair Display', serif",
-                borderImage:
-                  'linear-gradient(to bottom, #bae6fd, #38bdf8, #1e40af) 1',
+                borderImage: borderGradient,
                 borderStyle: 'solid',
               }}
             >
-              <ProductCard product={product} isInSwiper={true} />
+              <ProductCard product={product} isInSwiper={true} accent={accent} />
             </SwiperSlide>
           );
         })}
@@ -268,7 +270,18 @@ function CategorySwiper({ products }) {
   ) : (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <div
+          key={product.id}
+          className="rounded-3xl border-4 overflow-hidden shadow-lg"
+          style={{
+            borderImage: accent
+              ? 'linear-gradient(to bottom, #99f6e4, #2DD4BF, #0f766e) 1'
+              : 'linear-gradient(to bottom, #bae6fd, #38bdf8, #1e40af) 1',
+            borderStyle: 'solid',
+          }}
+        >
+          <ProductCard product={product} accent={accent} />
+        </div>
       ))}
     </div>
   );

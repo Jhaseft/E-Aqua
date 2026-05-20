@@ -1,3 +1,5 @@
+import { currency } from '@/utils/currency';
+
 export default function CartItems({ cart, loading, total }) {
 
     return (
@@ -17,8 +19,8 @@ export default function CartItems({ cart, loading, total }) {
                                 <th className="py-2 px-4 text-left"></th>
                                 <th className="py-2 px-4 text-left">Producto</th>
                                 <th className="py-2 px-4 text-center">Cantidad</th>
-                                <th className="py-2 px-4 text-right">Precio ($)</th>
-                                <th className="py-2 px-4 text-right">Subtotal ($)</th>
+                                <th className="py-2 px-4 text-right">Precio ({currency})</th>
+                                <th className="py-2 px-4 text-right">Subtotal ({currency})</th>
                             </tr>
                         </thead>
 
@@ -41,8 +43,8 @@ export default function CartItems({ cart, loading, total }) {
                                             </p>
                                         </td>
                                         <td className="py-2 px-4 text-center">{item.qty}</td>
-                                        <td className="py-2 px-4 text-right">{Number(item.price).toFixed(0)}</td>
-                                        <td className="py-2 px-4 text-right font-semibold">{itemSubtotal.toFixed(0)}</td>
+                                        <td className="py-2 px-4 text-right tabular-nums">{Number(item.price).toFixed(0)}</td>
+                                        <td className="py-2 px-4 text-right font-semibold tabular-nums">{itemSubtotal.toFixed(0)}</td>
                                     </tr>
                                 );
                             })}
@@ -51,8 +53,8 @@ export default function CartItems({ cart, loading, total }) {
                         <tfoot>
                             <tr>
                                 <td colSpan="4" className="py-2 px-4 text-right font-bold text-darkGray text-lg">Total:</td>
-                                <td className="py-2 px-4 text-right font-bold text-lg text-turquoise">
-                                    {Number(total).toFixed(0)} $
+                                <td className="py-2 px-4 text-right font-bold text-lg text-turquoise tabular-nums">
+                                    {currency} {Number(total).toFixed(0)}
                                 </td>
                             </tr>
                         </tfoot>
@@ -73,7 +75,7 @@ export default function CartItems({ cart, loading, total }) {
                                         <div>
                                             <p className="text-darkGray font-semibold">{item.name}</p>
                                             <p className="text-grayCustom text-sm">{item.options.variant || item.variant}</p>
-                                            <p className="text-grayCustom text-sm">Precio: {Number(item.price).toFixed(0)} $</p>
+                                            <p className="text-grayCustom text-sm tabular-nums">Precio: {currency} {Number(item.price).toFixed(0)}</p>
                                         </div>
                                     </div>
 
@@ -84,7 +86,7 @@ export default function CartItems({ cart, loading, total }) {
 
                                     <div className="flex justify-between text-sm">
                                         <span className="text-grayCustom">Subtotal:</span>
-                                        <span className="font-bold text-darkGray">{itemSubtotal.toFixed(0)} $</span>
+                                        <span className="font-bold text-darkGray tabular-nums">{currency} {itemSubtotal.toFixed(0)}</span>
                                     </div>
                                 </div>
                             );
@@ -92,7 +94,7 @@ export default function CartItems({ cart, loading, total }) {
 
                         <div className="flex justify-between border-t border-grayCustom pt-3 text-lg font-bold text-darkGray">
                             <span>Total:</span>
-                            <span className="text-turquoise">{Number(total).toFixed(0)} $</span>
+                            <span className="text-turquoise tabular-nums">{currency} {Number(total).toFixed(0)}</span>
                         </div>
                     </div>
                 </div>

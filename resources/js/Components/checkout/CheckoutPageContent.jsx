@@ -8,6 +8,8 @@ import OrderSummary from './OrderSummary';
 import Layout from '@/Layouts/LayoutCheckout';
 import { Head } from '@inertiajs/react';
 import MethodPay from './MethodPay';
+import { PAYMENT_METHODS } from '@/Config/paymentMethods';
+import { currency } from '@/utils/currency';
 
 export default function CheckoutPageContent() {
     const { cart = [], subtotal = 0, total = 0 } = useCart();
@@ -49,7 +51,7 @@ export default function CheckoutPageContent() {
             size: item.options.variant,
         }));
 
-        const paymentMethodId = paymentMethod === "qr" ? 1 : 2;
+        const paymentMethodId = PAYMENT_METHODS.find(pm => pm.value === paymentMethod)?.id ?? 2;
 
         const orderData = {
             customer_name: customerName,
@@ -89,11 +91,11 @@ export default function CheckoutPageContent() {
 
             orderItems.forEach(i => {
                 messageLines.push(
-                    `• ${i.name} | Talla: ${i.size} | SKU: ${i.sku} | Cant: ${i.quantity} | Subtotal: $${i.subtotal}`
+                    `• ${i.name} | Talla: ${i.size} | SKU: ${i.sku} | Cant: ${i.quantity} | Subtotal: ${currency} ${i.subtotal}`
                 );
             });
 
-            messageLines.push('', ` *Total: $${total}*`);
+            messageLines.push('', ` *Total: ${currency} ${total}*`);
 
             const url = `https://wa.me/59177427374?text=${encodeURIComponent(messageLines.join('\n'))}`;
 

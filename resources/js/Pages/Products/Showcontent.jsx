@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCart } from "@/Contexts/CartContext";
 import ProductGallery from "./ProductGallery";
+import { currency } from "@/utils/currency";
 
 export default function ShowProduct({ product }) {
   const [selectedVariant, setSelectedVariant] = useState(
@@ -63,11 +64,11 @@ export default function ShowProduct({ product }) {
       </div>
 
 
-      <div className="space-y-6 sticky top-6 self-start" style={{ fontFamily: "'Playfair Display', serif" }}>
-        <h1 className="text-4xl font-extrabold uppercase text-bluePrimary">{product.name}</h1>
+      <div className="space-y-6 sticky top-6 self-start font-sans">
+        <h1 className="text-4xl font-extrabold text-bluePrimary" style={{ fontFamily: "'Playfair Display', serif" }}>{product.name}</h1>
         {!isWhatsAppOnly && (
-          <p className="text-3xl font-bold text-bluePrimary">
-            $ {Number(selectedVariant?.price ?? product.price).toFixed(0)}
+          <p className="text-3xl font-bold tabular-nums text-bluePrimary">
+            {currency} {Number(selectedVariant?.price ?? product.price).toFixed(0)}
           </p>
         )}
 

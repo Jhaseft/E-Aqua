@@ -3,7 +3,6 @@ import Header from '@/Components/welcome/Header';
 import Footer from '@/Components/welcome/Footer';
 import { CartProvider } from '@/Contexts/CartContext';
 import { useState } from 'react';
-import CartIcon from '@/Components/welcome/Cart/CartIcon';
 import CartModal from '@/Components/welcome/Cart/CartModal';
 
 export default function Layout({ title, auth, children }) {
@@ -14,7 +13,7 @@ export default function Layout({ title, auth, children }) {
       <Head title={title || "Aqua Health "} />
 
       <div className="min-h-screen flex flex-col bg-white text-darkGray relative">
-        <Header auth={auth} />
+        <Header auth={auth} onCartOpen={() => setCartOpen(true)} />
 
         <main className="flex-1 container mx-auto px-6 py-10">
           {children}
@@ -22,12 +21,6 @@ export default function Layout({ title, auth, children }) {
 
         <Footer />
 
-        
-        <div className="fixed bottom-24 right-6 z-[9000]">
-          <CartIcon onClick={() => setCartOpen(true)} />
-        </div>
-
-       
         <CartModal
           isOpen={isCartOpen}
           onClose={() => setCartOpen(false)}

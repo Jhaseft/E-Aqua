@@ -21,7 +21,12 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # -----------------------------------------------
-# Instalar Node.js 18 LTS desde tar (evita problemas de repositorio)
+# Configuración PHP uploads
+# -----------------------------------------------
+RUN echo "upload_max_filesize=200M\npost_max_size=220M\nmemory_limit=512M\nmax_execution_time=300\nmax_input_time=300" > /usr/local/etc/php/conf.d/uploads.ini
+
+# -----------------------------------------------
+# Instalar Node.js 18 LTS desde tar
 # -----------------------------------------------
 RUN curl -fsSL https://nodejs.org/dist/v18.20.1/node-v18.20.1-linux-x64.tar.xz -o /tmp/node.tar.xz \
     && mkdir -p /usr/local/node \

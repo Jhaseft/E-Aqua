@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "additionalDirectories": [
+      "C:\\Program Files\\php-8.3.22"
+    ]
+  }
+}

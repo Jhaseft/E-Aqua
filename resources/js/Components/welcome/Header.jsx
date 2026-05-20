@@ -1,7 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
 import { useState, useEffect, useRef } from 'react';
+import CartIcon from '@/Components/welcome/Cart/CartIcon';
 
-export default function Header({ auth }) {
+export default function Header({ auth, onCartOpen }) {
   const { props } = usePage();
   const [flashMessage, setFlashMessage] = useState(null);
   const categories = props.categories || [];
@@ -28,11 +29,9 @@ export default function Header({ auth }) {
 
   return (
     <>
-    
-      <header className="w-full bg-white text-gray-800 shadow-sm py-4 border-b border-blueLight">
+      <header className="w-full bg-white text-gray-800 shadow-sm py-4 border-b border-blueLight sticky top-0 z-40">
         <div className="container mx-auto flex justify-between items-center px-6">
 
-          
           <Link href="/" className="flex items-center gap-3">
             <img
               src="https://res.cloudinary.com/dnbklbswg/image/upload/v1759791758/Logo_AH_con_HTW_wzxlez.jpg"
@@ -41,7 +40,6 @@ export default function Header({ auth }) {
             />
           </Link>
 
-          
           <nav className="flex md:text-2xl md:gap-10 text-xl gap-4 font-medium items-center">
 
             {categories.length > 0 && (
@@ -98,12 +96,13 @@ export default function Header({ auth }) {
             >
               Contacto
             </Link>
+
+            <CartIcon onClick={onCartOpen} />
           </nav>
 
         </div>
       </header>
 
-     
       {flashMessage && (
         <div
           className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-500
@@ -116,7 +115,6 @@ export default function Header({ auth }) {
         </div>
       )}
 
-     
       <style>
         {`
           @keyframes slideDown {

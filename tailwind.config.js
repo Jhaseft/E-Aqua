@@ -24,6 +24,7 @@ export default {
                 greenDark: '#176c36',     // Verde oscuro
                 blueLight: '#add8df',     // Azul claro
                 blueSecondary: '#5398bb', // Azul secundario
+                aquamarine: '#2DD4BF',    // Verde aquamarine (Armo Química)
             },
         },
     },
