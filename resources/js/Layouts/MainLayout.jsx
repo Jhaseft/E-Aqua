@@ -15,7 +15,7 @@ export default function Layout({ title, auth, children }) {
       <div className="min-h-screen flex flex-col bg-white text-darkGray relative">
         <Header auth={auth} onCartOpen={() => setCartOpen(true)} />
 
-        <main className="flex-1 container mx-auto px-6 py-10">
+        <main className="flex-1 w-full">
           {children}
         </main>
 

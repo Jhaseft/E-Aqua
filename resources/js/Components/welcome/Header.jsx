@@ -1,21 +1,39 @@
 import { Link, usePage } from '@inertiajs/react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import CartIcon from '@/Components/welcome/Cart/CartIcon';
+
+const NAV_ORDER = [
+  'equipos',
+  'armo',
+  'producto',
+  'accesorio',
+  'planta',
+];
+
+function sortCategories(cats) {
+  const isDestacado = (name) => {
+    const n = name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    return n.includes('destacado');
+  };
+
+  const getOrder = (name) => {
+    const n = name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const idx = NAV_ORDER.findIndex(k => n.includes(k));
+    return idx === -1 ? 99 : idx;
+  };
+
+  return cats
+    .filter(c => !isDestacado(c.name))
+    .sort((a, b) => getOrder(a.name) - getOrder(b.name));
+}
 
 export default function Header({ auth, onCartOpen }) {
   const { props } = usePage();
   const [flashMessage, setFlashMessage] = useState(null);
-  const categories = props.categories || [];
-  const [catOpen, setCatOpen] = useState(false);
-  const catRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const handler = (e) => {
-      if (catRef.current && !catRef.current.contains(e.target)) setCatOpen(false);
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
+  const rawCategories = props.categories || [];
+  const categories = sortCategories(rawCategories);
 
   useEffect(() => {
     if (props?.flash?.success) {
@@ -27,72 +45,53 @@ export default function Header({ auth, onCartOpen }) {
     }
   }, [props]);
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  const scrollTo = (id) => {
+    setMenuOpen(false);
+    setTimeout(() => {
+      document.getElementById(`category-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  };
+
   return (
     <>
-      <header className="w-full bg-white text-gray-800 shadow-sm py-4 border-b border-blueLight sticky top-0 z-40">
-        <div className="container mx-auto flex justify-between items-center px-6">
+      <header className="w-full bg-white text-gray-800 shadow-sm border-b border-blueLight sticky top-0 z-40">
+        <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 h-16 md:h-20">
 
-          <Link href="/" className="flex items-center gap-3">
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0">
             <img
               src="https://res.cloudinary.com/dnbklbswg/image/upload/v1759791758/Logo_AH_con_HTW_wzxlez.jpg"
-              alt="Logo de la tienda"
-              className="h-16 w-32 md:h-24 md:w-48 object-contain transition-transform duration-300 hover:scale-105"
+              alt="Aqua Health"
+              className="h-10 md:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
             />
           </Link>
 
-          <nav className="flex md:text-2xl md:gap-10 text-xl gap-4 font-medium items-center">
-
-            {categories.length > 0 && (
-              <div className="relative" ref={catRef}>
-                <button
-                  onClick={() => setCatOpen(v => !v)}
-                  className="flex items-center gap-1 text-sm font-medium text-gray-400 hover:text-bluePrimary transition-colors duration-200"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-                  </svg>
-                  <span className="hidden sm:inline">Categorías</span>
-                </button>
-
-                {catOpen && (
-                  <div className="absolute top-full right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl py-2 min-w-[180px] z-50">
-                    {categories.map(cat => (
-                      <button
-                        key={cat.id}
-                        onClick={() => {
-                          setCatOpen(false);
-                          document.getElementById(`category-${cat.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:text-bluePrimary hover:bg-blue-50 transition-colors"
-                      >
-                        {cat.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => scrollTo(cat.id)}
+                className="relative text-sm lg:text-base font-semibold uppercase tracking-wide text-gray-700 hover:text-bluePrimary transition-colors duration-200
+                  after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-bluePrimary after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {cat.name}
+              </button>
+            ))}
 
             <Link
               href="/Contacto"
-              className="
-                relative
-                font-semibold
-                text-greenDark
-                transition-colors
-                duration-300
-                hover:text-bluePrimary
-
-                after:absolute
-                after:left-0
-                after:-bottom-1
-                after:h-[2px]
-                after:w-0
-                after:bg-bluePrimary
-                after:transition-all
-                after:duration-300
-                hover:after:w-full
-              "
+              className="relative text-sm lg:text-base font-semibold uppercase tracking-wide text-greenDark hover:text-bluePrimary transition-colors duration-200
+                after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-bluePrimary after:transition-all after:duration-300 hover:after:w-full"
             >
               Contacto
             </Link>
@@ -100,32 +99,65 @@ export default function Header({ auth, onCartOpen }) {
             <CartIcon onClick={onCartOpen} />
           </nav>
 
+          {/* Mobile right side */}
+          <div className="flex md:hidden items-center gap-3">
+            <CartIcon onClick={onCartOpen} />
+
+            <button
+              onClick={() => setMenuOpen(v => !v)}
+              aria-label="Abrir menú"
+              className="flex flex-col justify-center items-center w-10 h-10 gap-[5px]"
+            >
+              <span className={`block h-[2px] w-6 bg-gray-700 transition-all duration-300 origin-center ${menuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+              <span className={`block h-[2px] w-6 bg-gray-700 transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+              <span className={`block h-[2px] w-6 bg-gray-700 transition-all duration-300 origin-center ${menuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+            </button>
+          </div>
+
+        </div>
+
+        {/* Mobile menu */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-gray-100 bg-white ${menuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
+        >
+          <nav className="flex flex-col px-6 py-4 gap-1">
+            {categories.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => scrollTo(cat.id)}
+                className="text-left text-base font-semibold uppercase tracking-wide text-gray-700 hover:text-bluePrimary py-3 border-b border-gray-100 transition-colors duration-200"
+              >
+                {cat.name}
+              </button>
+            ))}
+            <Link
+              href="/Contacto"
+              onClick={() => setMenuOpen(false)}
+              className="text-base font-semibold uppercase tracking-wide text-greenDark hover:text-bluePrimary py-3 transition-colors duration-200"
+            >
+              Contacto
+            </Link>
+          </nav>
         </div>
       </header>
 
       {flashMessage && (
         <div
           className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-500
-            ${flashMessage.type === 'success'
-              ? 'bg-greenDark text-white'
-              : 'bg-red-600 text-white'}
+            ${flashMessage.type === 'success' ? 'bg-greenDark text-white' : 'bg-red-600 text-white'}
             px-6 py-3 rounded-lg shadow-lg animate-slideDown`}
         >
           {flashMessage.message}
         </div>
       )}
 
-      <style>
-        {`
-          @keyframes slideDown {
-            0% { opacity: 0; transform: translateY(-20px) translateX(-50%); }
-            100% { opacity: 1; transform: translateY(0) translateX(-50%); }
-          }
-          .animate-slideDown {
-            animation: slideDown 0.4s ease-out forwards;
-          }
-        `}
-      </style>
+      <style>{`
+        @keyframes slideDown {
+          0% { opacity: 0; transform: translateY(-20px) translateX(-50%); }
+          100% { opacity: 1; transform: translateY(0) translateX(-50%); }
+        }
+        .animate-slideDown { animation: slideDown 0.4s ease-out forwards; }
+      `}</style>
     </>
   );
 }

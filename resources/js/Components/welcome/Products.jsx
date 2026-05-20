@@ -3,9 +3,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import ProductCard from './ProductCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 
 export default function Products({
   categories: initialCategories = [],
@@ -62,10 +63,39 @@ export default function Products({
     }
   };
 
+  const NAV_ORDER = ['equipos', 'armo', 'producto', 'accesorio', 'planta'];
+
+  const normalize = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+  const isDestacado = (name) => normalize(name).includes('destacado');
+
+  const getOrder = (name) => {
+    const n = normalize(name);
+    const idx = NAV_ORDER.findIndex(k => n.includes(k));
+    return idx === -1 ? 99 : idx;
+  };
+
+  const featuredCategory = categories.find(c => isDestacado(c.name));
+  const regularCategories = categories
+    .filter(c => !isDestacado(c.name))
+    .sort((a, b) => getOrder(a.name) - getOrder(b.name));
+
+  const featuredProducts = featuredCategory
+    ? [
+        ...featuredCategory.products,
+        ...(featuredCategory.children?.flatMap(ch => ch.products) ?? []),
+      ].filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    : [];
+
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <section className="bg-white p-4 text-gray-800">
-        {categories.map((category, idx) => {
+    <div>
+      {featuredProducts.length > 0 && (
+        <HeroSlider products={featuredProducts} />
+      )}
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <section className="bg-white text-gray-800">
+        {regularCategories.map((category, idx) => {
           const filteredProducts = category.products.filter(product =>
             product.name.toLowerCase().includes(searchTerm.toLowerCase())
           );
@@ -153,6 +183,51 @@ export default function Products({
           <p className="text-center text-bluePrimary py-6 font-semibold">Cargando…</p>
         )}
       </section>
+      </div>
+    </div>
+  );
+}
+
+function HeroSlider({ products }) {
+  return (
+    <div className="relative w-full bg-gray-50" style={{ minHeight: '320px' }}>
+      <Swiper
+        modules={[Autoplay, Navigation]}
+        autoplay={{ delay: 3500, disableOnInteraction: false }}
+        loop={true}
+        speed={800}
+        slidesPerView={1}
+        className="w-full"
+        navigation={{
+          prevEl: '.hero-prev',
+          nextEl: '.hero-next',
+        }}
+      >
+        {products.map((product) => {
+          const imageUrl = product.multimedia?.[0]?.url || 'https://via.placeholder.com/1600x900';
+          const href = `/products/${product.name.replace(/\s+/g, '-').toLowerCase()}/${product.id}`;
+
+          return (
+            <SwiperSlide key={product.id}>
+              <Link href={href} className="block w-full">
+                <img
+                  src={imageUrl}
+                  alt={product.name}
+                  className="w-full h-auto block"
+                  style={{ maxHeight: '90vh', objectFit: 'contain', margin: '0 auto' }}
+                />
+              </Link>
+            </SwiperSlide>
+          );
+        })}
+      </Swiper>
+
+      <button className="hero-prev absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-12 sm:w-11 sm:h-14 bg-white/80 backdrop-blur shadow-lg border border-gray-200 hover:bg-white transition rounded-sm">
+        <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+      </button>
+      <button className="hero-next absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 z-20 flex items-center justify-center w-9 h-12 sm:w-11 sm:h-14 bg-white/80 backdrop-blur shadow-lg border border-gray-200 hover:bg-white transition rounded-sm">
+        <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700" />
+      </button>
     </div>
   );
 }
