@@ -69,7 +69,7 @@ export default function Header({ auth, onCartOpen }) {
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <img
-              src="https://res.cloudinary.com/dnbklbswg/image/upload/v1759791758/Logo_AH_con_HTW_wzxlez.jpg"
+              src="https://res.cloudinary.com/dnbklbswg/image/upload/v1779339112/LogoColorHorizontal_efbozz.png"
               alt="Aqua Health"
               className="h-10 md:h-14 w-auto object-contain transition-transform duration-300 hover:scale-105"
             />
