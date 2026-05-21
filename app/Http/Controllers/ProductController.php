@@ -12,57 +12,26 @@ class ProductController extends Controller
 {
     public function index(Request $request)
 {
-    $search = $request->query('search', '');
-    $page = 1;
-    $perPage = 8; // mostrar 4 categorías al inicio
+    $search  = $request->query('search', '');
+    $perPage = 8;
 
-    $allCategories = Category::whereNull('parent_id')
-        ->with(['children', 'children.products', 'products.variants.values.attribute', 'products.multimedia'])
+    $total = Category::whereNull('parent_id')->count();
+
+    $categories = Category::whereNull('parent_id')
+        ->skip(0)
+        ->take($perPage)
         ->get()
-        ->map(function ($category) use ($search) {
-
-            $categoryProducts = $category->products()
-                ->where('available', 1)
-                ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
-                ->with(['variants.values.attribute', 'multimedia'])
-                ->get();
-
-            $children = $category->children->map(function ($child) use ($search) {
-                $childProducts = $child->products()
-                    ->where('available', 1)
-                    ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
-                    ->with(['variants.values.attribute', 'multimedia'])
-                    ->get();
-
-                return [
-                    'id' => $child->id,
-                    'name' => $child->name,
-                    'description'=>$child->description,
-                    'products' => $childProducts,
-                ];
-            });
-
-            return [
-                'id' => $category->id,
-                'name' => $category->name,
-                'description'=>$category->description,
-                'products' => $categoryProducts,
-                'children' => $children,
-            ];
-        });
-
-    $categories = $allCategories->forPage($page, $perPage)->values()->all();
-    $hasMore = $allCategories->count() > $perPage;
+        ->map(fn($category) => $this->buildCategoryData($category, $search));
 
     return Inertia::render('Welcome', [
-    'auth' => [
-        'user' => auth()->user() ? auth()->user()->only('id','name','email') : null
-    ],
-    'categories' => $categories,
-    'search' => $search,
-    'page' => $page,
-    'hasMore' => $hasMore,
-]);
+        'auth' => [
+            'user' => auth()->user() ? auth()->user()->only('id', 'name', 'email') : null,
+        ],
+        'categories' => $categories->values()->all(),
+        'search'     => $search,
+        'page'       => 1,
+        'hasMore'    => $total > $perPage,
+    ]);
 }
 
     public function show($slug, $id)
@@ -101,51 +70,50 @@ class ProductController extends Controller
 
 public function getCategoriasJson(Request $request)
 {
-    $search = $request->query('search', '');
-    $offset = (int) $request->query('offset', 0); // cuántas categorías ya se mostraron
-    $perPage = 2; //  cantidad de categoría por “ver más”
+    $search  = $request->query('search', '');
+    $offset  = (int) $request->query('offset', 0);
+    $perPage = 2;
 
-    $allCategories = Category::whereNull('parent_id')
-        ->with(['children', 'children.products', 'products.variants.values.attribute', 'products.multimedia'])
+    $total = Category::whereNull('parent_id')->count();
+
+    $categories = Category::whereNull('parent_id')
+        ->skip($offset)
+        ->take($perPage)
         ->get()
-        ->map(function ($category) use ($search) {
-
-            $categoryProducts = $category->products()
-                ->where('available', 1)
-                ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
-                ->with(['variants.values.attribute', 'multimedia'])
-                ->get();
-
-            $children = $category->children->map(function ($child) use ($search) {
-                $childProducts = $child->products()
-                    ->where('available', 1)
-                    ->when($search, fn($q) => $q->where('name', 'like', "%$search%"))
-                    ->with(['variants.values.attribute', 'multimedia'])
-                    ->get();
-
-                return [
-                    'id' => $child->id,
-                    'name' => $child->name,
-                    'products' => $childProducts,
-                ];
-            });
-
-            return [
-                'id' => $category->id,
-                'name' => $category->name,
-                'products' => $categoryProducts,
-                'children' => $children,
-            ];
-        });
-
-    // Aquí usamos offset en lugar de page
-    $categories = $allCategories->slice($offset, $perPage)->values()->all();
-    $hasMore = $allCategories->count() > $offset + $perPage;
+        ->map(fn($category) => $this->buildCategoryData($category, $search));
 
     return response()->json([
-        'categories' => $categories,
-        'hasMore' => $hasMore,
+        'categories' => $categories->values()->all(),
+        'hasMore'    => $total > $offset + $perPage,
     ]);
+}
+
+private function buildCategoryData($category, string $search): array
+{
+    $categoryProducts = $category->products()
+        ->where('available', 1)
+        ->when($search, fn($q) => $q->where('name', 'like', “%$search%”))
+        ->with(['variants.values.attribute', 'multimedia'])
+        ->get();
+
+    $children = $category->children()->with(['products' => function ($q) use ($search) {
+        $q->where('available', 1)
+          ->when($search, fn($q2) => $q2->where('name', 'like', “%$search%”))
+          ->with(['variants.values.attribute', 'multimedia']);
+    }])->get()->map(fn($child) => [
+        'id'          => $child->id,
+        'name'        => $child->name,
+        'description' => $child->description,
+        'products'    => $child->products->values()->all(),
+    ]);
+
+    return [
+        'id'          => $category->id,
+        'name'        => $category->name,
+        'description' => $category->description,
+        'products'    => $categoryProducts->values()->all(),
+        'children'    => $children->values()->all(),
+    ];
 }
 
 
