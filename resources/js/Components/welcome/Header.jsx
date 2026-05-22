@@ -31,6 +31,7 @@ export default function Header({ auth, onCartOpen }) {
   const { props } = usePage();
   const [flashMessage, setFlashMessage] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
   const rawCategories = props.categories || [];
   const categories = sortCategories(rawCategories);
@@ -54,6 +55,32 @@ export default function Header({ auth, onCartOpen }) {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!categories.length) return;
+
+    const observers = [];
+    const visibleSections = new Map();
+
+    categories.forEach(cat => {
+      const el = document.getElementById(`category-${cat.id}`);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          visibleSections.set(cat.id, entry.isIntersecting);
+          const firstVisible = categories.find(c => visibleSections.get(c.id));
+          setActiveId(firstVisible ? firstVisible.id : null);
+        },
+        { rootMargin: '-88px 0px -40% 0px', threshold: 0 }
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach(o => o.disconnect());
+  }, [categories]);
+
   const scrollTo = (id) => {
     setMenuOpen(false);
     setTimeout(() => {
@@ -76,17 +103,24 @@ export default function Header({ auth, onCartOpen }) {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8">
-            {categories.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => scrollTo(cat.id)}
-                className="relative text-sm lg:text-base font-semibold uppercase tracking-wide text-gray-700 hover:text-bluePrimary transition-colors duration-200
-                  after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-bluePrimary after:transition-all after:duration-300 hover:after:w-full"
-              >
-                {cat.name}
-              </button>
-            ))}
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 ml-10 lg:ml-16">
+            {categories.map(cat => {
+              const isActive = activeId === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => scrollTo(cat.id)}
+                  className={`relative text-sm lg:text-base font-semibold uppercase tracking-wide transition-colors duration-200
+                    after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:transition-all after:duration-300
+                    ${isActive
+                      ? 'text-bluePrimary after:w-full after:bg-bluePrimary'
+                      : 'text-gray-700 hover:text-bluePrimary after:w-0 after:bg-bluePrimary hover:after:w-full'
+                    }`}
+                >
+                  {cat.name}
+                </button>
+              );
+            })}
 
             <Link
               href="/Contacto"
@@ -121,15 +155,20 @@ export default function Header({ auth, onCartOpen }) {
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-gray-100 bg-white ${menuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
         >
           <nav className="flex flex-col px-6 py-4 gap-1">
-            {categories.map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => scrollTo(cat.id)}
-                className="text-left text-base font-semibold uppercase tracking-wide text-gray-700 hover:text-bluePrimary py-3 border-b border-gray-100 transition-colors duration-200"
-              >
-                {cat.name}
-              </button>
-            ))}
+            {categories.map(cat => {
+              const isActive = activeId === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => scrollTo(cat.id)}
+                  className={`text-left text-base font-semibold uppercase tracking-wide py-3 border-b border-gray-100 transition-colors duration-200
+                    ${isActive ? 'text-bluePrimary' : 'text-gray-700 hover:text-bluePrimary'}`}
+                >
+                  {isActive && <span className="inline-block w-1.5 h-1.5 rounded-full bg-bluePrimary mr-2 mb-0.5 align-middle" />}
+                  {cat.name}
+                </button>
+              );
+            })}
             <Link
               href="/Contacto"
               onClick={() => setMenuOpen(false)}

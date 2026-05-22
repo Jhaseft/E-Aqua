@@ -6,7 +6,6 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import ProductCard from './ProductCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Link } from '@inertiajs/react';
 
 export default function Products({
   categories: initialCategories = [],
@@ -90,10 +89,10 @@ export default function Products({
   return (
     <div>
       {featuredProducts.length > 0 && (
-        <HeroSlider products={featuredProducts} />
+        <HeroSlider products={featuredProducts} categories={regularCategories} />
       )}
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10">
       <section className="bg-white text-gray-800">
         {regularCategories.map((category, idx) => {
           const filteredProducts = category.products.filter(product =>
@@ -106,7 +105,7 @@ export default function Products({
           const isArmoQuimica = normalized.includes('armo') && (normalized.includes('quimica') || normalized.includes('química') || normalized.includes('quím'));
 
           return (
-            <div key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '64px' }} className="mb-16">
+            <div key={category.id} id={`category-${category.id}`} style={{ scrollMarginTop: '88px' }} className="mb-16">
               {idx !== 0 && (
                 <hr className="border-blueLight my-14" />
               )}
@@ -188,7 +187,21 @@ export default function Products({
   );
 }
 
-function HeroSlider({ products }) {
+function HeroSlider({ products, categories = [] }) {
+  const normalize = (s) =>
+    (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+
+  const scrollToCategory = (description) => {
+    const target = normalize(description);
+    if (!target) return;
+
+    const match = categories.find(cat => normalize(cat.name).includes(target) || target.includes(normalize(cat.name)));
+    if (!match) return;
+
+    const el = document.getElementById(`category-${match.id}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="relative w-full bg-gray-50" style={{ minHeight: '320px' }}>
       <Swiper
@@ -205,18 +218,32 @@ function HeroSlider({ products }) {
       >
         {products.map((product) => {
           const imageUrl = product.multimedia?.[0]?.url || 'https://via.placeholder.com/1600x900';
-          const href = `/products/${product.name.replace(/\s+/g, '-').toLowerCase()}/${product.id}`;
+          const hasTarget = !!product.description;
 
           return (
             <SwiperSlide key={product.id}>
-              <Link href={href} className="block w-full">
-                <img
-                  src={imageUrl}
-                  alt={product.name}
-                  className="w-full h-auto block"
-                  style={{ maxHeight: '90vh', objectFit: 'contain', margin: '0 auto' }}
-                />
-              </Link>
+              {hasTarget ? (
+                <button
+                  onClick={() => scrollToCategory(product.description)}
+                  className="block w-full cursor-pointer"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={product.name}
+                    className="w-full h-auto block"
+                    style={{ maxHeight: '90vh', objectFit: 'contain', margin: '0 auto' }}
+                  />
+                </button>
+              ) : (
+                <div className="block w-full">
+                  <img
+                    src={imageUrl}
+                    alt={product.name}
+                    className="w-full h-auto block"
+                    style={{ maxHeight: '90vh', objectFit: 'contain', margin: '0 auto' }}
+                  />
+                </div>
+              )}
             </SwiperSlide>
           );
         })}
