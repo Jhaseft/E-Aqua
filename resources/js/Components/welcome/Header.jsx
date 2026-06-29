@@ -101,7 +101,7 @@ export default function Header({ auth, onCartOpen }) {
             />
           </Link>
 
-          {/* Desktop nav */}
+        
           <nav className="hidden md:flex flex-1 items-center justify-center gap-6 lg:gap-8">
             {categories.map(cat => {
               const isActive = activeId === cat.id;
@@ -130,7 +130,6 @@ export default function Header({ auth, onCartOpen }) {
             </Link>
           </nav>
 
-          {/* Desktop cart (right) */}
           <div className="hidden md:flex flex-shrink-0 items-center">
             <CartIcon onClick={onCartOpen} />
           </div>

@@ -34,8 +34,20 @@ export default function HeroSlider({ products, categories = [] }) {
         }}
       >
         {products.map((product) => {
-          const imageUrl = product.multimedia?.[0]?.url || 'https://via.placeholder.com/1600x900';
+          const desktopUrl = product.multimedia?.[0]?.url || 'https://via.placeholder.com/1600x900';
+          const mobileUrl = product.multimedia?.[1]?.url || desktopUrl;
           const hasTarget = !!product.description;
+
+          const picture = (
+            <picture>
+              <source media="(max-width: 768px)" srcSet={mobileUrl} />
+              <img
+                src={desktopUrl}
+                alt={product.name}
+                className="w-full h-auto max-h-[500px] object-contain block"
+              />
+            </picture>
+          );
 
           return (
             <SwiperSlide key={product.id}>
@@ -44,19 +56,11 @@ export default function HeroSlider({ products, categories = [] }) {
                   onClick={() => scrollToCategory(product.description)}
                   className="block w-full cursor-pointer"
                 >
-                  <img
-                    src={imageUrl}
-                    alt={product.name}
-                    className="w-full h-auto max-h-[500px] object-contain block"
-                  />
+                  {picture}
                 </button>
               ) : (
                 <div className="block w-full">
-                  <img
-                    src={imageUrl}
-                    alt={product.name}
-                    className="w-full h-auto max-h-[500px] object-contain block"
-                  />
+                  {picture}
                 </div>
               )}
             </SwiperSlide>
