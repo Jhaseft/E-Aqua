@@ -102,7 +102,7 @@ export default function Header({ auth, onCartOpen }) {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6 lg:gap-8 ml-10 lg:ml-16">
+          <nav className="hidden md:flex flex-1 items-center justify-center gap-6 lg:gap-8">
             {categories.map(cat => {
               const isActive = activeId === cat.id;
               return (
@@ -128,9 +128,12 @@ export default function Header({ auth, onCartOpen }) {
             >
               Contacto
             </Link>
-
-            <CartIcon onClick={onCartOpen} />
           </nav>
+
+          {/* Desktop cart (right) */}
+          <div className="hidden md:flex flex-shrink-0 items-center">
+            <CartIcon onClick={onCartOpen} />
+          </div>
 
 
           <div className="flex md:hidden items-center gap-3">
