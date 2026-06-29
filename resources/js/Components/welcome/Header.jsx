@@ -93,7 +93,6 @@ export default function Header({ auth, onCartOpen }) {
       <header className="w-full bg-white text-gray-800 shadow-sm border-b border-blueLight sticky top-0 z-40">
         <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 h-16 md:h-20">
 
-          {/* Logo */}
           <Link href="/" className="flex-shrink-0">
             <img
               src="https://res.cloudinary.com/dnbklbswg/image/upload/v1779339112/LogoColorHorizontal_efbozz.png"
@@ -133,7 +132,7 @@ export default function Header({ auth, onCartOpen }) {
             <CartIcon onClick={onCartOpen} />
           </nav>
 
-          {/* Mobile right side */}
+
           <div className="flex md:hidden items-center gap-3">
             <CartIcon onClick={onCartOpen} />
 
@@ -150,7 +149,6 @@ export default function Header({ auth, onCartOpen }) {
 
         </div>
 
-        {/* Mobile menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-t border-gray-100 bg-white ${menuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
         >

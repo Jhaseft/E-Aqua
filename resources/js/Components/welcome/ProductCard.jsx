@@ -10,15 +10,15 @@ export default function ProductCard({ product, isInSwiper = false, accent = fals
 
   const priceColor = accent ? "text-aquamarine" : "text-green-700";
   const variantActiveColor = accent
-    ? "text-aquamarine border-aquamarine hover:bg-aquamarine hover:text-white"
-    : "text-blue-600 border-blue-400 hover:bg-blue-500 hover:text-white";
+    ? "text-teal-800 border-aquamarine hover:bg-aquamarine hover:text-white"
+    : "text-blue-700 border-blue-400 hover:bg-blue-500 hover:text-white";
 
   return (
     <Link
       href={`/products/${product.name.replace(/\s+/g, '-').toLowerCase()}/${product.id}`}
       className="w-full h-full relative overflow-hidden rounded-3xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col"
     >
-      <div className="w-full aspect-[4/5] p-4 bg-white border-b border-y-blueSecondary rounded-t-3xl overflow-hidden flex-shrink-0">
+      <div className="w-full aspect-[4/3] p-2.5 sm:p-4 bg-white border-b border-y-blueSecondary rounded-t-3xl overflow-hidden flex-shrink-0">
         <img
           src={imageUrl}
           alt={product.name}
@@ -26,10 +26,10 @@ export default function ProductCard({ product, isInSwiper = false, accent = fals
         />
       </div>
 
-      <div className="p-4 flex flex-col flex-1 gap-2 overflow-hidden">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 gap-2 overflow-hidden">
         {/* Nombre: siempre 2 líneas de altura para que todos los cards queden alineados */}
         <h3
-          className="text-lg font-extrabold tracking-wide text-gray-900 line-clamp-2 leading-snug"
+          className="text-sm sm:text-lg font-extrabold tracking-wide text-gray-900 line-clamp-2 leading-snug"
           style={{ minHeight: '3.2em', letterSpacing: '0.04em' }}
         >
           {product.name}
@@ -60,7 +60,7 @@ export default function ProductCard({ product, isInSwiper = false, accent = fals
               Solo por WhatsApp
             </span>
           ) : (
-            <p className={`text-xl font-bold font-sans tabular-nums ${priceColor}`}>
+            <p className={`text-base sm:text-xl font-bold font-sans tabular-nums ${priceColor}`}>
               {currency} {Number(product.price).toFixed(0)}
             </p>
           )}
