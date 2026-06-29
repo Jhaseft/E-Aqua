@@ -47,7 +47,7 @@ export default function HeroSlider({ products, categories = [] }) {
                   <img
                     src={imageUrl}
                     alt={product.name}
-                    className="w-full h-auto block"
+                    className="w-full h-auto max-h-[500px] object-contain block"
                   />
                 </button>
               ) : (
@@ -55,7 +55,7 @@ export default function HeroSlider({ products, categories = [] }) {
                   <img
                     src={imageUrl}
                     alt={product.name}
-                    className="w-full h-auto block"
+                    className="w-full h-auto max-h-[500px] object-contain block"
                   />
                 </div>
               )}
