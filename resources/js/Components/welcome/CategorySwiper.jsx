@@ -10,8 +10,8 @@ export default function CategorySwiper({ products, accent = false }) {
   if (!products?.length) return null;
 
   const isDesktopCarousel = products.length > 2;
-  // Solo activamos el bucle/autoplay si hay más productos que los visibles en PC (5)
-  const canLoop = products.length > 5;
+  // Solo activamos el bucle/autoplay si hay más productos que los visibles en PC (4)
+  const canLoop = products.length > 4;
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -50,7 +50,7 @@ export default function CategorySwiper({ products, accent = false }) {
           0: { slidesPerView: 2, spaceBetween: 12 },
           640: { slidesPerView: 3, spaceBetween: 16 },
           1024: { slidesPerView: 4, spaceBetween: 20 },
-          1280: { slidesPerView: 5, spaceBetween: 24 },
+          1280: { slidesPerView: 4, spaceBetween: 24 },
         }}
       >
         {products.map((product) => {

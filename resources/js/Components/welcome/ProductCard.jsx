@@ -10,8 +10,8 @@ export default function ProductCard({ product, isInSwiper = false, accent = fals
 
   const priceColor = accent ? "text-aquamarine" : "text-green-700";
   const variantActiveColor = accent
-    ? "text-teal-800 border-aquamarine hover:bg-aquamarine hover:text-white"
-    : "text-blue-700 border-blue-400 hover:bg-blue-500 hover:text-white";
+    ? "text-black border-aquamarine hover:bg-aquamarine hover:text-white"
+    : "text-black border-blue-400 hover:bg-blue-500 hover:text-white";
 
   return (
     <Link
